@@ -95,7 +95,7 @@ void MainWindow::on_calcuar_clicked()
         c = QString::number(variable.at(k).contador);
 
         probabilidad = variable.at(k).contador/total;
-
+        variable.at(k).probabilidad = redondear;
         redondear = roundf(probabilidad*1000)/1000;
 
         d = QString::number(redondear);
@@ -103,8 +103,9 @@ void MainWindow::on_calcuar_clicked()
         entropia = entropia+probabilidad*log2(probabilidad);
 
         poner = poner+a+"\t|\t"+c+"\t|\t"+d+"\n";
+        std::cout<<variable.at(k).probabilidad;
     }
-    //prueba
+
 
     entropia = -entropia;
     entropia = roundf(entropia*1000)/1000;

@@ -27,6 +27,7 @@ private:
     struct Caracteres{
         std::string letra;
         int contador;
+        float probabilidad;
     };
 
     Ui::MainWindow *ui;
