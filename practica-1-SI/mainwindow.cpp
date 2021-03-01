@@ -91,27 +91,57 @@ void MainWindow::on_calcuar_clicked()
     QString a,c, d, poner, e;
     double probabilidad = 0.0;
     for(int k = 0; k<variable.size(); k++){
-        a = QString::fromStdString(variable.at(k).letra);
-        c = QString::number(variable.at(k).contador);
+        //a = QString::fromStdString(variable.at(k).letra);
+        //c = QString::number(variable.at(k).contador);
 
         probabilidad = variable.at(k).contador/total;
-        variable.at(k).probabilidad = redondear;
-        redondear = roundf(probabilidad*1000)/1000;
+        variable.at(k).probabilidad = probabilidad;
+        //redondear = roundf(probabilidad*1000)/1000;
+
+        //d = QString::number(redondear);
+
+        //entropia = entropia+probabilidad*log2(probabilidad);
+
+        //poner = poner+a+"\t|\t"+c+"\t|\t"+d+"\n";
+    }
+    Caracteres temporal;
+    for(int m=0; m<variable.size(); m++){
+        for(int n=0; n<variable.size()-1; n++){
+            std::cout<<n<<","<<m<<EOF;
+            //if(variable.at(n).contador<variable.at(n-1).contador){
+            if(variable.at(n).contador<variable.at(n+1).contador){
+                temporal = variable.at(n);
+
+                variable.at(n)=variable.at(n+1);
+                //variable.at(n)=variable.at(n);
+
+                //variable.at(n+1)=temporal;
+                variable.at(n+1)=temporal;
+            }
+        }
+    }
+
+    for(int z = 0; z<variable.size(); z++){
+        if(variable.at(z).letra.compare(" ")==0){
+            variable.at(z).letra = "⌴";
+        }
+        a = QString::fromStdString(variable.at(z).letra);
+        c = QString::number(variable.at(z).contador);
+        redondear = roundf(variable.at(z).probabilidad*1000)/1000;
 
         d = QString::number(redondear);
 
-        entropia = entropia+probabilidad*log2(probabilidad);
+        entropia = entropia+variable.at(z).probabilidad*log2(variable.at(z).probabilidad);
 
         poner = poner+a+"\t|\t"+c+"\t|\t"+d+"\n";
-        std::cout<<variable.at(k).probabilidad;
     }
-
-
+    std::wstring p;
     entropia = -entropia;
     entropia = roundf(entropia*1000)/1000;
     c = QString::number(total);
     e = QString::number(entropia);
     poner = poner+"\n\t\t\t\t\t"+c;
-    this->ui->output->setText(poner);
+    p = poner.toStdWString();
+    this->ui->output->setText(QString::fromStdWString(p));
     this->ui->entropia->setText(e);
 }
